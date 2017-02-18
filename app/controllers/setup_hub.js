@@ -16,7 +16,7 @@ module.exports = function ( request, reply) {
 	var Hub = require( '../models/hub');
 	Hub.findOne(
 	{ 
-		is_deleted:0,
+		is_deleted: false,
 		hub_token: request.query.hub_token
 	}, 
 	function( err, hub) {
