@@ -364,57 +364,57 @@ describe('dns_refresh', function() {
                 assert.equal( res.text, '[FALSE]');
                 done();
             });
-    });
+    // });
  
-    it('new_ip empty', function(done) {
-        request
-            .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=&status=1')
-            .end( function(error, res) {
-                assert.ifError(error);
-                assert.equal( res.text, '[FALSE]');
-                done();
-            });
-    });
+    // it('new_ip empty', function(done) {
+    //     request
+    //         .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=&status=1')
+    //         .end( function(error, res) {
+    //             assert.ifError(error);
+    //             assert.equal( res.text, '[FALSE]');
+    //             done();
+    //         });
+    // });
  
-    it('new_ip not found', function(done) {
-        request
-            .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&status=1')
-            .end( function(error, res) {
-                assert.ifError(error);
-                assert.equal( res.text, '[FALSE]');
-                done();
-            });
-    });
+    // it('new_ip not found', function(done) {
+    //     request
+    //         .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&status=1')
+    //         .end( function(error, res) {
+    //             assert.ifError(error);
+    //             assert.equal( res.text, '[FALSE]');
+    //             done();
+    //         });
+    // });
  
-    it('new_ip wrong format 1', function(done) {
-        request
-            .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=aaa.456.782.1&status=1')
-            .end( function(error, res) {
-                assert.ifError(error);
-                assert.equal( res.text, '[FALSE]');
-                done();
-            });
-    });
+    // it('new_ip wrong format 1', function(done) {
+    //     request
+    //         .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=aaa.456.782.1&status=1')
+    //         .end( function(error, res) {
+    //             assert.ifError(error);
+    //             assert.equal( res.text, '[FALSE]');
+    //             done();
+    //         });
+    // });
  
-    it('new_ip wrong format 2', function(done) {
-        request
-            .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=456.782.1&status=1')
-            .end( function(error, res) {
-                assert.ifError(error);
-                assert.equal( res.text, '[FALSE]');
-                done();
-            });
-    });
+    // it('new_ip wrong format 2', function(done) {
+    //     request
+    //         .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=456.782.1&status=1')
+    //         .end( function(error, res) {
+    //             assert.ifError(error);
+    //             assert.equal( res.text, '[FALSE]');
+    //             done();
+    //         });
+    // });
  
-    it('new_ip wrong format 3', function(done) {
-        request
-            .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=123.456.782.1.4&status=1')
-            .end( function(error, res) {
-                assert.ifError(error);
-                assert.equal( res.text, '[FALSE]');
-                done();
-            });
-    });
+    // it('new_ip wrong format 3', function(done) {
+    //     request
+    //         .get( host + '/dns_refresh?hub_token=inactivehub12345&mac=aa:bb:cc:dd:ee:ff&new_ip=123.456.782.1.4&status=1')
+    //         .end( function(error, res) {
+    //             assert.ifError(error);
+    //             assert.equal( res.text, '[FALSE]');
+    //             done();
+    //         });
+    // });
  
     it('status empty', function(done) {
         request

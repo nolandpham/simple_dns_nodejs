@@ -2,7 +2,7 @@
 
 module.exports = function ( request, reply) {
 	request.query.new_ip = request.info.remoteAddress;
-	console.log( "Call API: dns_refresh: (", request.query, ")");
+	console.log( request.info.remoteAddress + " call API: dns_refresh: (", request.query, ")");
 
 	// validating
 	if( !request.query.hub_token) {
@@ -59,13 +59,14 @@ module.exports = function ( request, reply) {
 		hub_token: request.query.hub_token
 	}, 
 	function( err, hub) {
-		console.log( hub);
 		if( err) {
+			console.log( "False when connect database.");
 			reply( '[FALSE]');
 			return;
 		}
 		if( hub) {
 			if( !hub.mac) {// activing new hub
+				console.log( "Found new hub, activing....");
 				Hub.find(
 				{
 					mac: request.query.mac,
@@ -73,7 +74,10 @@ module.exports = function ( request, reply) {
 					is_deleted:0
 				},
 				function( err, old_hubs) {
-					if( err) console.log( err);
+					if( err) {
+						console.log( "False when connect database.")
+						console.log( err);
+					}
 
 					if( old_hubs !== undefined && old_hubs.length > 0) {
 						for (var i = old_hubs.length - 1; i >= 0; i--) {
@@ -89,9 +93,11 @@ module.exports = function ( request, reply) {
 			hub.save();
 			// TODO: save log
 
+			console.log( "Response: [OK].");
 			reply( '[OK]');
 			return;
 		}
+		console.log( "Hub token not found or that hub was deleted.");
 		reply( '[FALSE]');
 	});
 }
