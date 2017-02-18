@@ -25,8 +25,8 @@ var hubSchema = new Schema({
 		length: 16
 	},
 	is_deleted: {
-		type: Boolean,
-		default: false
+		type: Number,
+		default: 0
 	},
 	created_at: {
 		type: Date,
