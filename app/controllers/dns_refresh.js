@@ -45,7 +45,7 @@ module.exports = function ( request, reply) {
 		reply( '[FALSE]');
 		return;
 	}
-	var status_format = /^[012]$/;
+	var status_format = /^[123]$/;
 	if( !status_format.test( request.query.status)) {
 		console.log( "The Status field wrong format.");
 		reply( '[FALSE]');
