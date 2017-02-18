@@ -69,9 +69,9 @@ module.exports = function ( request, reply) {
 				console.log( "Found new hub, activing....");
 				Hub.find(
 				{
-					is_deleted: 0
+					is_deleted: 0,
 					mac: request.query.mac,
-					id: { $ne: hub.id},
+					id: { $ne: hub.id}
 				},
 				function( err, old_hubs) {
 					if( err) {
