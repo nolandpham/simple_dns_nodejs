@@ -55,7 +55,7 @@ module.exports = function ( request, reply) {
 	var Hub = require( '../models/hub');
 	Hub.findOne(
 	{ 
-		is_deleted: false,
+		is_deleted: 0,
 		hub_token: request.query.hub_token
 	}, 
 	function( err, hub) {
@@ -69,9 +69,9 @@ module.exports = function ( request, reply) {
 				console.log( "Found new hub, activing....");
 				Hub.find(
 				{
+					is_deleted: 0
 					mac: request.query.mac,
 					id: { $ne: hub.id},
-					is_deleted: false
 				},
 				function( err, old_hubs) {
 					if( err) {
@@ -81,7 +81,7 @@ module.exports = function ( request, reply) {
 
 					if( old_hubs !== undefined && old_hubs.length > 0) {
 						for (var i = old_hubs.length - 1; i >= 0; i--) {
-							old_hubs[i].is_deleted = true;
+							old_hubs[i].is_deleted = 1;
 							old_hubs[i].save();
 						}
 					}
