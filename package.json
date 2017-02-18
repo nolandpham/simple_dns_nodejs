@@ -2,9 +2,9 @@
   "name": "simple_dns_nodejs",
   "version": "0.0.1",
   "description": "Simple DNS with Nodejs",
-  "main": "app.js",
+  "main": "start.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha app/tests/start_test.js --timeout 5000"
   },
   "repository": {
     "type": "git",
@@ -23,10 +23,12 @@
   "homepage": "https://github.com/nolandpham/simple_dns_nodejs#readme",
   "dependencies": {
     "hapi": "^16.1.0",
+    "joi": "^10.2.1",
     "mongoose": "^4.8.1"
   },
   "devDependencies": {
     "migrate": "^0.2.3",
+    "mocha": "^3.2.0",
     "unit.js": "^2.0.0"
   }
 }
