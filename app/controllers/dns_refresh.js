@@ -1,6 +1,7 @@
 'use trict'
 
 module.exports = function ( request, reply) {
+	request.query.new_ip = request.info.remoteAddress;
 	console.log( "Call API: dns_refresh: (", request.query, ")");
 
 	// validating
