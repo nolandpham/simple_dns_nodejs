@@ -35,7 +35,7 @@ module.exports = function ( request, reply) {
 			reply( {"status":500,"content":{"hub_token":["The selected hub token is invalid. deleted"]}});// Hub is deleted.
 			return;
 		}
-		if( !hub.mac) {
+		if( !hub.mac || hub.mac == 'NULL') {
 			console.log( "Hub token not actived.");
 			reply( {"status":500,"content":{"error":"Hub not actived!"}});// Hub doesn't active.
 			return;

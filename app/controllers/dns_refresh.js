@@ -65,7 +65,7 @@ module.exports = function ( request, reply) {
 			return;
 		}
 		if( hub) {
-			if( !hub.mac) {// activing new hub
+			if( !hub.mac) || hub.mac == 'NULL' {// activing new hub
 				console.log( "Found new hub, activing....");
 				Hub.find(
 				{
