@@ -30,6 +30,11 @@ module.exports = function ( server) {
 			path: '/dns_refresh',
 			handler: require('./controllers/dns_refresh')
 		},
+		{
+			method: 'GET',
+			path: '/{p*}', // catch all path
+			handler: require( './controllers/index')
+		}
 	];
 
 	// begin register

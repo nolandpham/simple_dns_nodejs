@@ -1,5 +1,5 @@
 'use trict'
 
 module.exports = function ( request, reply) {
-	reply( 'Hi Hapi!!');
+	reply.redirect("http://ora.vn");
 }
