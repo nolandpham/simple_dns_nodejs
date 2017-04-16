@@ -1,7 +1,8 @@
 'use trict'
 
-module.exports = function ( request, reply) {
-	console.log( request.info.remoteAddress + " call API: setup_hub: (", request.query, ")");
+var setup_hub_controller = function ( request, reply) {
+	var server = require( '../../app');
+	server.log('info',  request.info.remoteAddress + " call API: setup_hub: (", request.query, ")");
 
 	// validating
 	if( !request.query.hub_token) {
@@ -21,12 +22,12 @@ module.exports = function ( request, reply) {
 	}, 
 	function( err, hub) {
 		if( err) {
-			console.log( "False when connect database.");
+			server.log('info',  "False when connect database.");
 			reply( {"status":500,"content": err});
 			return;
 		}
 		if( hub) {
-			console.log( "Hub token exists.");
+			server.log('info',  "Hub token exists.");
 			reply( {"status":500,"content":{"error":"Hub Token exists."}});// Hub token exists.
 			return;
 		}
@@ -34,7 +35,8 @@ module.exports = function ( request, reply) {
 		var hub = new Hub({hub_token: request.query.hub_token});
 		hub.save();
 
-		console.log( "Response: Done.");
+		server.log('info',  "Response: Done.");
 		reply( {"status":200,"content":{"message":"Done"}});
 	});
 }
+module.exports = setup_hub_controller;

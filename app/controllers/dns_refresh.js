@@ -1,53 +1,55 @@
 'use trict'
 
-module.exports = function ( request, reply) {
+var dns_refresh_controller = function ( request, reply) {
+	var server = require( '../../app');
+	// store new IP
 	request.query.new_ip = request.info.remoteAddress;
-	console.log( request.info.remoteAddress + " call API: dns_refresh: (", request.query, ")");
+	server.log('info',  request.info.remoteAddress + " call API: dns_refresh: (", request.query, ")");
 
 	// validating
 	if( !request.query.hub_token) {
-		console.log( "The hub token field is required.");
+		server.log('info',  "The hub token field is required.");
 		reply( '[FALSE]');
 		return;
 	}
 	if( request.query.hub_token.length != 16) {
-		console.log( "The hub token must be 16 characters.");
+		server.log('info',  "The hub token must be 16 characters.");
 		reply( '[FALSE]');
 		return;
 	}
 
 	if( !request.query.mac) {
-		console.log( "The mac field is required.");
+		server.log('info',  "The mac field is required.");
 		reply( '[FALSE]');
 		return;
 	}
 	var mac_format = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
 	if( !mac_format.test( request.query.mac)) {
-		console.log( "The mac field wrong format.");
+		server.log('info',  "The mac field wrong format.");
 		reply( '[FALSE]');
 		return;
 	}
 
 	if( !request.query.new_ip) {
-		console.log( "The New IP field is required.");
+		server.log('info',  "The New IP field is required.");
 		reply( '[FALSE]');
 		return;
 	}
 	var ip_format = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
 	if( !ip_format.test( request.query.new_ip)) {
-		console.log( "The New IP field wrong format.");
+		server.log('info',  "The New IP field wrong format.");
 		reply( '[FALSE]');
 		return;
 	}
 
 	if( !request.query.status) {
-		console.log( "The Status field is required.");
+		server.log('info',  "The Status field is required.");
 		reply( '[FALSE]');
 		return;
 	}
 	var status_format = /^[123]$/;
 	if( !status_format.test( request.query.status)) {
-		console.log( "The Status field wrong format.");
+		server.log('info',  "The Status field wrong format.");
 		reply( '[FALSE]');
 		return;
 	}
@@ -60,13 +62,13 @@ module.exports = function ( request, reply) {
 	}, 
 	function( err, hub) {
 		if( err) {
-			console.log( "False when connect database.");
+			server.log('info',  "False when connect database.");
 			reply( '[FALSE]');
 			return;
 		}
 		if( hub) {
 			if( !hub.mac || hub.mac == 'NULL') {// activing new hub
-				console.log( "Found new hub, activing....");
+				server.log('info',  "Found new hub, activing....");
 				Hub.find(
 				{
 					is_deleted: 0,
@@ -75,8 +77,8 @@ module.exports = function ( request, reply) {
 				},
 				function( err, old_hubs) {
 					if( err) {
-						console.log( "False when connect database.")
-						console.log( err);
+						server.log('info',  "False when connect database.")
+						server.log('info',  err);
 					}
 
 					if( old_hubs !== undefined && old_hubs.length > 0) {
@@ -93,11 +95,12 @@ module.exports = function ( request, reply) {
 			hub.save();
 			// TODO: save log
 
-			console.log( "Response: [OK].");
+			server.log('info',  "Response: [OK].");
 			reply( '[OK]');
 			return;
 		}
-		console.log( "Hub token not found or that hub was deleted.");
+		server.log('info',  "Hub token not found or that hub was deleted.");
 		reply( '[FALSE]');
 	});
-}
+};
+module.exports = dns_refresh_controller;

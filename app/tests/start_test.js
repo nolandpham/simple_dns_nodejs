@@ -364,7 +364,7 @@ describe('dns_refresh', function() {
                 assert.equal( res.text, '[FALSE]');
                 done();
             });
-    // });
+    });
  
     // it('new_ip empty', function(done) {
     //     request

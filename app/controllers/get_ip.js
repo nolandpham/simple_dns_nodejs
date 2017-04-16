@@ -1,7 +1,8 @@
 'use trict'
 
-module.exports = function ( request, reply) {
-	console.log( request.info.remoteAddress + " call API: get_ip: (", request.query, ")");
+var get_ip_controller = function ( request, reply) {
+	var server = require( '../../app');
+	request.log('info',  request.info.remoteAddress + " call API: get_ip: ");
 
 	// validating
 	if( !request.query.hub_token) {
@@ -21,27 +22,28 @@ module.exports = function ( request, reply) {
 	}, 
 	function( err, hub) {
 		if( err) {
-			console.log( "False when connect database.");
+			request.log('info',  "False when connect database.");
 			reply( {"status":500,"content": err});
 			return;
 		}
 		if( !hub) {
-			console.log( "Hub token not found.");
+			request.log('info',  "Hub token not found.");
 			reply( {"status":500,"content":{"hub_token":["The selected hub token is invalid. Not found"]}});// Hub not found.
 			return;
 		}
 		if( hub.is_deleted) {
-			console.log( "Hub token was deleted.");
+			request.log('info',  "Hub token was deleted.");
 			reply( {"status":500,"content":{"hub_token":["The selected hub token is invalid. deleted"]}});// Hub is deleted.
 			return;
 		}
 		if( !hub.mac || hub.mac == 'NULL') {
-			console.log( "Hub token not actived.");
+			request.log('info',  "Hub token not actived.");
 			reply( {"status":500,"content":{"error":"Hub not actived!"}});// Hub doesn't active.
 			return;
 		}
 
-		console.log( "Response: " + hub.ip);
+		request.log('info',  "Response: " + hub.ip);
 		reply( {"status":200,"content":{"ip":hub.ip}});
 	});
 }
+module.exports = get_ip_controller;

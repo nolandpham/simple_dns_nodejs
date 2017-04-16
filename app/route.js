@@ -11,14 +11,7 @@ module.exports = function ( server) {
 		{
 			method: 'GET',
 			path: '/get_ip',
-			handler: require('./controllers/get_ip'),
-		    // config: {
-		    //     validate: {
-		    //         query: {
-		    //             hub_token: Joi.string().alphanum().length(16).required()
-		    //         }
-		    //     }
-		    // }
+			handler: require('./controllers/get_ip')
 		},
 		{
 			method: 'GET',
@@ -38,7 +31,9 @@ module.exports = function ( server) {
 	];
 
 	// begin register
+	server.log('info', 'Loading controller ...');
 	for (var i = controllers.length - 1; i >= 0; i--) {
 		server.route( controllers[i]);
 	}
+	server.log('info', 'Load done.');
 };

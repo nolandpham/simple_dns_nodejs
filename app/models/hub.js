@@ -40,7 +40,7 @@ var hubSchema = new Schema({
 
 hubSchema.method({
 	online: function() {
-		console.log( this);
+		server.log('info',  this);
 	},
 	offline: function() {
 
@@ -55,21 +55,23 @@ hubSchema.method({
 
 	},
 	print: function() {
-		console.log( '%s: (%s-%s-%d)', this._id, this.mac, this.ip, this.is_deleted);
+		var server = require( '../../app');
+		server.log('info',  '%s: (%s-%s-%d)', this._id, this.mac, this.ip, this.is_deleted);
 	}
 });
 
 hubSchema.static({
 	printAll: function() {
-		console.log( "Print node: ");
+		var server = require( '../../app');
+		server.log('info',  "Print node: ");
 		this.find(function( err, result) {
-			if( err) console.log( err);
+			if( err) server.log('info',  err);
 			if( typeof( result) == 'object') {
 				result.forEach( function( node) {
-					console.log( '%s: (%s-%d-%d)', node._id, node.mac, node.ip, node.is_deleted);
+					server.log('info',  '%s: (%s-%d-%d)', node._id, node.mac, node.ip, node.is_deleted);
 				})
 			} else {
-				console.log( result);
+				server.log('info',  result);
 			}
 		});
 	}
