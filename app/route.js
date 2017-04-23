@@ -32,6 +32,11 @@ module.exports = function ( server) {
 		},
 		{
 			method: 'GET',
+			path: '/timer',
+			handler: require('./controllers/timer')
+		},
+		{
+			method: 'GET',
 			path: '/{p*}', // catch all path
 			handler: require( './controllers/index')
 		}

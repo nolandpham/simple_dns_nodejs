@@ -65,7 +65,8 @@ module.exports = function ( request, reply) {
 			return;
 		}
 		if( hub) {
-			if( !hub.mac || hub.mac == 'NULL') {// activing new hub
+			// activing new hub
+			if( !hub.mac || hub.mac == 'NULL') {
 				console.log( "Found new hub, activing....");
 				Hub.find(
 				{
@@ -77,12 +78,13 @@ module.exports = function ( request, reply) {
 					if( err) {
 						console.log( "False when connect database.")
 						console.log( err);
-					}
-
-					if( old_hubs !== undefined && old_hubs.length > 0) {
-						for (var i = old_hubs.length - 1; i >= 0; i--) {
-							old_hubs[i].is_deleted = 1;
-							old_hubs[i].save();
+					} else {
+						// remove old hubs.
+						if( old_hubs !== undefined && old_hubs.length > 0) {
+							for (var i = old_hubs.length - 1; i >= 0; i--) {
+								old_hubs[i].is_deleted = 1;
+								old_hubs[i].save();
+							}
 						}
 					}
 					hub.mac = request.query.mac;
@@ -91,7 +93,6 @@ module.exports = function ( request, reply) {
 			}
 			hub.ip = request.query.new_ip;
 			hub.save();
-			// TODO: save log
 
 			console.log( "Response: [OK].");
 			reply( '[OK]');
