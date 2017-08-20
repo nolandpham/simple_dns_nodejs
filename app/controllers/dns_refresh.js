@@ -1,4 +1,4 @@
-'use trict'
+'use trict';
 
 module.exports = function ( request, reply) {
 	var time = new Date().toISOString()
@@ -58,72 +58,49 @@ module.exports = function ( request, reply) {
 	var Hub = require( '../models/hub');
 	if( request.query.status == 1) {
 		console.log("Activing hub....");
-		// check token exists
-		Hub.find(
+		
+		Hub.findOne(
 		{
 			is_deleted: 0,
-			mac: request.query.mac,
 			hub_token: request.query.hub_token
-		}, function(err, hub_exists) {
+		}, 
+		function(err, active_hub) {
 			if( err) {
-				console.log( "False when connect database.")
+				console.log( "False when connect database.");
 				console.log( err);
 			} else {
-				if( hub_exists.length == 0) {
+				if( active_hub && active_hub.mac == null) {
 					// remove old hubs
 					Hub.find(
-					{ 
+					{
 						is_deleted: 0,
-						mac: request.query.mac,
+						mac: request.query.mac
 					}, 
-					function( err, old_hubs) {
-						if( err) {
-							console.log( "False when connect database.")
-							console.log( err);
-						} else {
-							// remove old hubs.
-							if( old_hubs !== undefined && old_hubs.length > 0) {
-								console.log("Found " + old_hubs.length + " old hubs. Deleting ...");
-								for (var i = old_hubs.length - 1; i >= 0; i--) {
-									old_hubs[i].is_deleted = 1;
-									old_hubs[i].save();
-								}
+					function(err, old_hubs) {
+						console.log("Found old hubs: " + old_hubs.length);
+						if( old_hubs !== undefined && old_hubs.length > 0) {
+							console.log("Found " + old_hubs.length + " old hubs. Deleting ...");
+							for (var i = old_hubs.length - 1; i >= 0; i--) {
+								console.log("Delete hub: " + old_hubs[i].id);
+								old_hubs[i].is_deleted = 1;
+								old_hubs[i].save();
 							}
-
-							// console.log("Insert new hub");
-							Hub.findOne(
-							{
-								is_deleted: 0,
-								hub_token: request.query.hub_token,
-							}, 
-							function( err, hub) {
-								if( err) {
-									console.log( "False when connect database.")
-									console.log( err);
-								} else {
-									if( hub.mac == null) {
-										hub.mac = request.query.mac;
-										hub.ip = request.query.new_ip;
-										hub.save();
-						
-										console.log( "Response: [OK].");
-										reply( '[OK]');
-									} else {
-										console.log( "Hub exists. Can\'t active again!");
-										reply( '[FALSE]');
-									}
-								}
-							});
 						}
+
+						// insert new hub
+						active_hub.mac = request.query.mac;
+						active_hub.ip  = request.query.new_ip;
+						active_hub.save();
+						console.log( "Response: [OK].");
+						reply( '[OK]');
 					});
 				} else {
-					console.log( "Hub exists. Can\'t active again!");
+					console.log( "Hub not found or hub_token was used by other hub.");
 					reply( '[FALSE]');
 				}
 			}
 		});
-	}
-	else {
+	} else {
 		console.log("Refresh DNS....");
 		Hub.findOne(
 		{
@@ -133,7 +110,7 @@ module.exports = function ( request, reply) {
 		}, 
 		function( err, hub) {
 			if( err) {
-				console.log( "False when connect database.")
+				console.log( "False when connect database.");
 				console.log( err);
 			} else {
 				if( hub) {

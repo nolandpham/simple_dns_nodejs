@@ -1,4 +1,4 @@
-'use trict'
+'use trict';
 
 module.exports = function ( request, reply) {
 	var time = new Date().toISOString()
@@ -47,4 +47,4 @@ module.exports = function ( request, reply) {
 		console.log( "Response: " + hub.ip);
 		reply( {"status":200,"content":{"ip":hub.ip}});
 	});
-}
+};

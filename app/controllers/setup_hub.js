@@ -1,4 +1,4 @@
-'use trict'
+'use trict';
 
 module.exports = function ( request, reply) {
 	var time = new Date().toISOString()
@@ -34,10 +34,10 @@ module.exports = function ( request, reply) {
 			return;
 		}
 
-		var hub = new Hub({hub_token: request.query.hub_token});
-		hub.save();
+		var new_hub = new Hub({hub_token: request.query.hub_token});
+		new_hub.save();
 
 		console.log( "Response: Done.");
 		reply( {"status":200,"content":{"message":"Done"}});
 	});
-}
+};
