@@ -91,6 +91,10 @@ module.exports = function ( request, reply) {
 							hub.ip = request.query.new_ip;
 							hub.hub_token = request.query.hub_token;
 							hub.save();
+
+							console.log( "Response: [OK].");
+							reply( '[OK]');
+							return;
 						}
 					});
 				}
@@ -111,8 +115,13 @@ module.exports = function ( request, reply) {
 			} else {
 				hub.ip = request.query.new_ip;
 				hub.save();
+
+				console.log( "Response: [OK].");
+				reply( '[OK]');
+				return;
 			}
 		});
-
 	}
+	console.log( "Hub token not found or that hub was deleted.");
+	reply( '[FALSE]');
 }
