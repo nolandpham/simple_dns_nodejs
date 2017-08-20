@@ -1,8 +1,11 @@
 'use trict'
 
 module.exports = function ( request, reply) {
+	var time = new Date().toISOString()
+					 .replace(/\..+/, '')
+					 .replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '[$3-$2-$1 $4:$5:$6]');
 	request.query.new_ip = request.info.remoteAddress;
-	console.log( request.info.remoteAddress + " call API: dns_refresh: (", request.query, ")");
+	console.log( time + "[INFO]" + request.info.remoteAddress + " call API: dns_refresh: (", request.query, ")");
 
 	// validating
 	if( !request.query.hub_token) {
@@ -66,8 +69,7 @@ module.exports = function ( request, reply) {
 				console.log( "False when connect database.")
 				console.log( err);
 			} else {
-				console.log( hub_exists);
-				if( hub_exists == null) {
+				if( hub_exists.length == 0) {
 					// remove old hubs
 					Hub.find(
 					{ 
@@ -88,23 +90,35 @@ module.exports = function ( request, reply) {
 								}
 							}
 
-							console.log("Insert new hub");
-							// insert new hub
-							hub = new Hub();
-							hub.mac = request.query.mac;
-							hub.ip = request.query.new_ip;
-							hub.hub_token = request.query.hub_token;
-							hub.save();
-
-							console.log( "Response: [OK].");
-							reply( '[OK]');
-							return;
+							// console.log("Insert new hub");
+							Hub.findOne(
+							{
+								is_deleted: 0,
+								hub_token: request.query.hub_token,
+							}, 
+							function( err, hub) {
+								if( err) {
+									console.log( "False when connect database.")
+									console.log( err);
+								} else {
+									if( hub.mac == null) {
+										hub.mac = request.query.mac;
+										hub.ip = request.query.new_ip;
+										hub.save();
+						
+										console.log( "Response: [OK].");
+										reply( '[OK]');
+									} else {
+										console.log( "Hub exists. Can\'t active again!");
+										reply( '[FALSE]');
+									}
+								}
+							});
 						}
 					});
 				} else {
 					console.log( "Hub exists. Can\'t active again!");
 					reply( '[FALSE]');
-					return;
 				}
 			}
 		});
@@ -122,12 +136,16 @@ module.exports = function ( request, reply) {
 				console.log( "False when connect database.")
 				console.log( err);
 			} else {
-				hub.ip = request.query.new_ip;
-				hub.save();
-
-				console.log( "Response: [OK].");
-				reply( '[OK]');
-				return;
+				if( hub) {
+					hub.ip = request.query.new_ip;
+					hub.save();
+	
+					console.log( "Response: [OK].");
+					reply( '[OK]');
+				} else {
+					console.log( "Hub not found. Or mac+token not match!");
+					reply( '[FALSE]');
+				}
 			}
 		});
 	}

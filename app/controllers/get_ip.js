@@ -1,7 +1,10 @@
 'use trict'
 
 module.exports = function ( request, reply) {
-	console.log( request.info.remoteAddress + " call API: get_ip: (", request.query, ")");
+	var time = new Date().toISOString()
+					 .replace(/\..+/, '')
+					 .replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '[$3-$2-$1 $4:$5:$6]');
+	console.log( time + "[INFO]" + request.info.remoteAddress + " call API: get_ip: (", request.query, ")");
 
 	// validating
 	if( !request.query.hub_token) {
