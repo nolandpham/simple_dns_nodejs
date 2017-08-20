@@ -54,6 +54,7 @@ module.exports = function ( request, reply) {
 
 	var Hub = require( '../models/hub');
 	if( request.query.status == 1) {
+		console.log("Activing hub....");
 		// check token exists
 		Hub.find(
 		{
@@ -80,11 +81,14 @@ module.exports = function ( request, reply) {
 						} else {
 							// remove old hubs.
 							if( old_hubs !== undefined && old_hubs.length > 0) {
+								console.log("Found " + old_hubs.length + " old hubs. Deleting ...");
 								for (var i = old_hubs.length - 1; i >= 0; i--) {
 									old_hubs[i].is_deleted = 1;
 									old_hubs[i].save();
 								}
 							}
+
+							console.log("Insert new hub");
 							// insert new hub
 							hub = new Hub();
 							hub.mac = request.query.mac;
@@ -97,13 +101,18 @@ module.exports = function ( request, reply) {
 							return;
 						}
 					});
+				} else {
+					console.log( "Hub exists. Can\'t active again!");
+					reply( '[FALSE]');
+					return;
 				}
 			}
 		});
 	}
 	else {
+		console.log("Refresh DNS....");
 		Hub.findOne(
-		{ 
+		{
 			is_deleted: 0,
 			mac: request.query.mac,
 			hub_token: request.query.hub_token,
@@ -122,6 +131,4 @@ module.exports = function ( request, reply) {
 			}
 		});
 	}
-	console.log( "Hub token not found or that hub was deleted.");
-	reply( '[FALSE]');
 }
